@@ -11,13 +11,13 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - saas_database:/var/lib/mysql
+      - scp_database:/var/lib/mysql
     
     environment:
-      - MYSQL_USER=adil
-      - MYSQL_PASSWORD=K3ep0u7!!1
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=SCP!PROJECT
       - MYSQL_DATABASE=scp
       - MYSQL_RANDOM_ROOT_PASSWORD=1
 
 volumes:
-  saas_database:
+  scp_database:
