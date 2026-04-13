@@ -16,7 +16,7 @@ services:
     environment:
       - MYSQL_USER=adil
       - MYSQL_PASSWORD=K3ep0u7!!1
-      - MYSQL_DATABASE=saas-project
+      - MYSQL_DATABASE=scp
       - MYSQL_RANDOM_ROOT_PASSWORD=1
 
 volumes:
