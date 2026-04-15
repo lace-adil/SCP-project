@@ -1,0 +1,29 @@
+//Main tables
+Table users {
+  id int [pk, increment]
+  username varchar(45) [not null]
+  password_hash varchar(64) [not null]
+}
+
+Table scp_subjects {
+  id int [pk, increment]
+  object_class varchar(15) [not null]
+  containment_procedures varchar(1024)
+  description varchar(4096)
+}
+
+
+Table staff {
+  id int [pk, increment]
+  first_name varchar(45)
+  last_name varchar(45)
+  clearence_level bit(3)
+  user_id int [unique, not null, ref: - users.id]
+  role_id int [ref: > roles.id]
+}
+
+Table roles {
+  id int [pk, increment]
+  role_name varchar(45)
+  role_description varchar(64)
+}
