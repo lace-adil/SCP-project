@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Response, Request, responses, requests
+from fastapi import APIRouter, Response, Request, responses, requests, HTTPException
 import src.utils as utils
 import sqlalchemy
 from .schemas import *
@@ -30,6 +30,8 @@ def getSCPSubject(item_id: int, res: Response):
         object_class = data[1]
     else:
         pass
+        res = HTTPException(status_code=404, detail="404 Item Not Found")
+        return res
         # res = responses.RedirectResponse("/")
         # return res
 
