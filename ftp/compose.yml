@@ -3,3 +3,6 @@ services:
     build: .
 #    volumes:
 #    - ./ftp_files:/ftp
+    ports:
+      - "20:20"
+      - "21:21"
