@@ -29,8 +29,9 @@ def getSCPSubject(item_id: int, res: Response):
         description = data[3]
         object_class = data[1]
     else:
-        res = responses.RedirectResponse("/")
-        return res
+        pass
+        # res = responses.RedirectResponse("/")
+        # return res
 
     return {"Item-#":item_id, "object_class":object_class ,"procedures": procedures, "description":description}
 
