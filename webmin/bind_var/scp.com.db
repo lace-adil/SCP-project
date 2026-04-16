@@ -1,0 +1,15 @@
+$TTL 60
+
+@ IN SOA ns.scp.com. admin.scp.com. (
+    2024041601  ; Serial
+    3600        ; Refresh
+    1800        ; Retry
+    4W          ; Expire
+    1D          ; Minimum
+)
+
+    IN  NS  ns.scp.com.
+
+
+ns  IN  A   10.113.8.255
+db  IN  A   10.113.8.255
