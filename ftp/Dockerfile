@@ -14,7 +14,7 @@ COPY ./vsftpd.conf /etc/vsftpd.conf
 RUN mkdir -p /var/run/vsftpd/empty
 
 
-RUN mkdir -p ftp ftp/scp_files ftp/incidents_files ftp/other_files
+#RUN mkdir -p ftp ftp/scp_files ftp/incidents_files ftp/other_files
 
 # Create admin user to SSH into
 RUN useradd admin && echo "admin:SCP!PROJECT" | chpasswd && mkdir /home/admin && chown admin:admin /home/admin && echo "/bin/bash" | chsh admin && usermod -aG sudo admin

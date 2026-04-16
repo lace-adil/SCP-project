@@ -1,8 +1,8 @@
 services:
   ftp:
     build: .
-#    volumes:
-#    - ./ftp_files:/ftp
+    volumes:
+    - ./ftp_files:/ftp/files
     ports:
       - "20:20"
       - "21:21"
