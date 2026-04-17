@@ -1,0 +1,41 @@
+services:
+  zabbix-server:
+    container_name: zabbix-server
+    image: zabbix/zabbix-server-mysql
+    environment:
+      - DB_SERVER_HOST=zabbix-database
+      - MYSQL_USER=zabbx
+      - MYSQL_PASSWORD=SCP!PROJECT
+    depends_on:
+      - zabbix-database
+  
+#  zabbix-frontend:
+#    container_name: zabbix-frontend
+#    image: zabbix/zabbix-web-apache-mysql
+#    environment:
+#      - ZBX_SERVER_HOST=zabbix-server
+#      - DB_SERVER_HOST=zabbix-database
+#      - MYSQL_USER=zabbx
+#      - MYSQL_PASSWORD=SCP!PROJECT
+#    depends_on:
+#      - zabbix-server
+
+  
+  zabbix-database:
+    container_name: zabbix-database
+    image: mysql
+    volumes:
+      - zabbix_database:/var/lib/mysql
+      - ./database-init:/docker-entrypoint-initdb.d
+    
+    environment:
+      - MYSQL_USER=zabbx
+      - MYSQL_PASSWORD=SCP!PROJECT
+      - MYSQL_DATABASE=zabbix
+      - MYSQL_RANDOM_ROOT_PASSWORD=1
+#      - MYSQL_ROOT_PASSWORD=SCP!PROJECT
+
+  
+  
+volumes:
+  zabbix_database:
