@@ -1,24 +1,29 @@
 services:
   zabbix-server:
     container_name: zabbix-server
-    image: zabbix/zabbix-server-mysql
+    image: zabbix/zabbix-server-mysql:7.4-ubuntu-latest
     environment:
       - DB_SERVER_HOST=zabbix-database
       - MYSQL_USER=zabbx
       - MYSQL_PASSWORD=SCP!PROJECT
     depends_on:
       - zabbix-database
+    ports:
+    - "10050:10050"
   
-#  zabbix-frontend:
-#    container_name: zabbix-frontend
-#    image: zabbix/zabbix-web-apache-mysql
-#    environment:
-#      - ZBX_SERVER_HOST=zabbix-server
-#      - DB_SERVER_HOST=zabbix-database
-#      - MYSQL_USER=zabbx
-#      - MYSQL_PASSWORD=SCP!PROJECT
-#    depends_on:
-#      - zabbix-server
+
+  zabbix-frontend:
+    container_name: zabbix-frontend
+    image: zabbix/zabbix-web-apache-mysql
+    environment:
+      - ZBX_SERVER_HOST=zabbix-server
+      - DB_SERVER_HOST=zabbix-database
+      - MYSQL_USER=zabbx
+      - MYSQL_PASSWORD=SCP!PROJECT
+    depends_on:
+      - zabbix-server
+    ports:
+      - "80:8080"
 
   
   zabbix-database:
