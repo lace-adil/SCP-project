@@ -16,3 +16,4 @@ db  IN  A   10.113.8.255
 zbx IN  A   192.168.18.101
 www IN  CNAME   @
 @   IN  A   192.168.18.101
+mail IN A 10.113.8.255

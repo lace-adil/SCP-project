@@ -3,8 +3,8 @@ services:
 #    build: .
     image: ubuntu/bind9
     ports:
-      - "30053:53"
-      - "30053:53/udp"
+      - "53:53"
+      - "53:53/udp"
 #      - "10000:10000"
     volumes:
       - ./bind:/etc/bind
