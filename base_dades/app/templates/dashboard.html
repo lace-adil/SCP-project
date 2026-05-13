@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - SCP Database</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .navbar h1 {
+            font-size: 24px;
+        }
+        
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .user-info {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid white;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .welcome-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .welcome-section h2 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+        
+        .database-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .database-section h3 {
+            color: #764ba2;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 0.5rem;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+        
+        .action-btn:hover {
+            background: #764ba2;
+        }
+        
+        .action-btn.secondary {
+            background: #6c757d;
+        }
+        
+        .action-btn.secondary:hover {
+            background: #5a6268;
+        }
+        
+        .action-btn.danger {
+            background: #dc3545;
+        }
+        
+        .action-btn.danger:hover {
+            background: #c82333;
+        }
+        
+        table .action-btn {
+            padding: 6px 12px;
+            font-size: 12px;
+            margin-right: 5px;
+        }
+        
+        table .action-btn:last-child {
+            margin-right: 0;
+        }
+        
+        .data-display {
+            overflow-x: auto;
+            margin-top: 1rem;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #f9f9f9;
+        }
+        
+        thead {
+            background: #667eea;
+            color: white;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        td {
+            word-break: break-word;
+            max-width: 200px;
+        }
+        
+        tr:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+        
+        .error {
+            background: #fee;
+            color: #c33;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+            border-left: 4px solid #c33;
+        }
+        
+        .success {
+            background: #efe;
+            color: #3c3;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+            border-left: 4px solid #3c3;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #555;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: inherit;
+            font-size: 14px;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        
+        .modal.show {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        #listModal .modal-content {
+            max-width: 95%;
+            width: 95%;
+            max-height: 90vh;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 0.5rem;
+        }
+        
+        .modal-header h2 {
+            color: #667eea;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .close-btn:hover {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>SCP Database</h1>
+        <div class="navbar-right">
+            <div class="user-info">Welcome, <strong id="username">{{ username }}</strong>!</div>
+            <form action="/auth/logout" method="POST" style="margin: 0;">
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="welcome-section">
+            <h2>Welcome to the SCP Database</h2>
+            <p>You are now logged in. Use the options below to manage SCP subjects in the database.</p>
+        </div>
+        
+        <div class="database-section">
+            <h3>SCP Subjects Database</h3>
+            
+            <div class="button-group">
+                <button class="action-btn" onclick="showListModal()">View All SCP Subjects</button>
+                <button class="action-btn secondary" onclick="showAddModal()">Add New SCP Subject</button>
+                <button class="action-btn" onclick="updateDatabase()">Update Database</button>
+            </div>
+            
+            <div id="messageContainer"></div>
+            <div id="dataContainer"></div>
+        </div>
+    </div>
+    
+    <!-- View List Modal -->
+    <div id="listModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>SCP Subjects List</h2>
+                <button class="close-btn" onclick="closeModal('listModal')">&times;</button>
+            </div>
+            <div id="listContent" class="loading">Loading...</div>
+        </div>
+    </div>
+    
+    <!-- Edit Subject Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit SCP Subject</h2>
+                <button class="close-btn" onclick="closeModal('editModal')">&times;</button>
+            </div>
+            <form id="editForm">
+                <input type="hidden" id="editId" name="id">
+                <div class="form-group">
+                    <label for="editObjectClass">Object Class</label>
+                    <input type="text" id="editObjectClass" name="object_class" required>
+                </div>
+                <div class="form-group">
+                    <label for="editProcedures">Containment Procedures</label>
+                    <textarea id="editProcedures" name="containment_procedures" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="editDescription">Description</label>
+                    <textarea id="editDescription" name="description" rows="4" required></textarea>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button type="submit" class="action-btn" style="flex: 1;">Save Changes</button>
+                    <button type="button" class="action-btn danger" onclick="deleteCurrentSubject()" style="flex: 1;">Delete Subject</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Add Subject Modal -->
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New SCP Subject</h2>
+                <button class="close-btn" onclick="closeModal('addModal')">&times;</button>
+            </div>
+            <form id="addForm">
+                <div class="form-group">
+                    <label for="subjectId">ID (leave blank for auto-increment)</label>
+                    <input type="number" id="subjectId" name="id" min="1">
+                </div>
+                <div class="form-group">
+                    <label for="objectClass">Object Class</label>
+                    <input type="text" id="objectClass" name="object_class" required>
+                </div>
+                <div class="form-group">
+                    <label for="procedures">Containment Procedures</label>
+                    <textarea id="procedures" name="containment_procedures" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="action-btn" style="width: 100%;">Add Subject</button>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        const username = document.getElementById('username');
+        
+        function showListModal() {
+            const modal = document.getElementById('listModal');
+            const content = document.getElementById('listContent');
+            content.textContent = 'Loading...';
+            modal.classList.add('show');
+            
+            fetch('/scp/list')
+                .then(res => res.json())
+                .then(data => {
+                    if (Object.keys(data).length === 0) {
+                        content.innerHTML = '<div class="empty-state">No SCP subjects found.</div>';
+                        return;
+                    }
+                    
+                    let html = '<table><thead><tr><th>ID</th><th>Object Class</th><th>Containment Procedures</th><th>Description</th><th>Actions</th></tr></thead><tbody>';
+                    for (const [id, subject] of Object.entries(data)) {
+                        const procPreview = subject.containment_procedures.substring(0, 50);
+                        const descPreview = subject.description.substring(0, 50);
+                        html += `<tr>
+                            <td>${id}</td>
+                            <td>${subject.object_class}</td>
+                            <td>${procPreview}...</td>
+                            <td>${descPreview}...</td>
+                            <td>
+                                <button class="action-btn" onclick="loadEditModal(${id})" style="padding: 5px 10px; font-size: 12px;">Edit</button>
+                                <a href="/scp/${id}" class="action-btn secondary" style="padding: 5px 10px; font-size: 12px; text-decoration: none; display: inline-block;">View</a>
+                            </td>
+                        </tr>`;
+                    }
+                    html += '</tbody></table>';
+                    content.innerHTML = html;
+                })
+                .catch(err => {
+                    content.innerHTML = '<div class="error">Failed to load data: ' + err.message + '</div>';
+                });
+        }
+        
+        function showAddModal() {
+            document.getElementById('addModal').classList.add('show');
+            document.getElementById('addForm').reset();
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+        
+        function updateDatabase() {
+            const messageContainer = document.getElementById('messageContainer');
+            messageContainer.innerHTML = '<div class="loading">Updating database...</div>';
+            
+            fetch('/update-db')
+                .then(res => res.json())
+                .then(data => {
+                    messageContainer.innerHTML = '<div class="success">Database updated successfully!</div>';
+                })
+                .catch(err => {
+                    messageContainer.innerHTML = '<div class="error">Failed to update database: ' + err.message + '</div>';
+                });
+        }
+        
+        document.getElementById('addForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const idValue = document.getElementById('subjectId').value;
+            const data = {
+                id: idValue ? parseInt(idValue) : -1,
+                object_class: document.getElementById('objectClass').value,
+                containment_procedures: document.getElementById('procedures').value,
+                description: document.getElementById('description').value
+            };
+            
+            try {
+                const response = await fetch('/scp/insert', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                const messageContainer = document.getElementById('messageContainer');
+                
+                if (response.ok) {
+                    messageContainer.innerHTML = '<div class="success">SCP subject added successfully!</div>';
+                    closeModal('addModal');
+                } else {
+                    messageContainer.innerHTML = '<div class="error">Failed to add subject: ' + result.detail + '</div>';
+                }
+            } catch (err) {
+                document.getElementById('messageContainer').innerHTML = '<div class="error">Error: ' + err.message + '</div>';
+            }
+        });
+        
+        // Close modal when clicking outside
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('show');
+                }
+            });
+        });
+        
+        async function loadEditModal(id) {
+            const modal = document.getElementById('editModal');
+            
+            try {
+                const response = await fetch(`/scp/get/${id}`);
+                const data = await response.json();
+                
+                document.getElementById('editId').value = id;
+                document.getElementById('editObjectClass').value = data.object_class;
+                document.getElementById('editProcedures').value = data.containment_procedures;
+                document.getElementById('editDescription').value = data.description;
+                
+                modal.classList.add('show');
+            } catch (err) {
+                alert('Failed to load subject: ' + err.message);
+            }
+        }
+        
+        document.getElementById('editForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const id = document.getElementById('editId').value;
+            const data = {
+                id: parseInt(id),
+                object_class: document.getElementById('editObjectClass').value,
+                containment_procedures: document.getElementById('editProcedures').value,
+                description: document.getElementById('editDescription').value
+            };
+            
+            try {
+                const response = await fetch(`/scp/update/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                const messageContainer = document.getElementById('messageContainer');
+                
+                if (response.ok) {
+                    messageContainer.innerHTML = '<div class="success">SCP subject updated successfully!</div>';
+                    closeModal('editModal');
+                    closeModal('listModal');
+                    showListModal(); // Refresh the list
+                } else {
+                    messageContainer.innerHTML = '<div class="error">Failed to update subject: ' + result.detail + '</div>';
+                }
+            } catch (err) {
+                document.getElementById('messageContainer').innerHTML = '<div class="error">Error: ' + err.message + '</div>';
+            }
+        });
+        
+        async function deleteCurrentSubject() {
+            const id = document.getElementById('editId').value;
+            
+            if (!confirm(`Are you sure you want to delete SCP-${id}? This action cannot be undone.`)) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/scp/delete/${id}`, {
+                    method: 'DELETE'
+                });
+                
+                const result = await response.json();
+                const messageContainer = document.getElementById('messageContainer');
+                
+                if (response.ok) {
+                    messageContainer.innerHTML = '<div class="success">SCP subject deleted successfully!</div>';
+                    closeModal('editModal');
+                    closeModal('listModal');
+                    showListModal(); // Refresh the list
+                } else {
+                    messageContainer.innerHTML = '<div class="error">Failed to delete subject: ' + result.detail + '</div>';
+                }
+            } catch (err) {
+                document.getElementById('messageContainer').innerHTML = '<div class="error">Error: ' + err.message + '</div>';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -9,6 +9,15 @@ class SCPSubject(BaseModel):
     object_class: str = None
     containment_procedures: str = None
     description: str = None
+
+class User(BaseModel):
+    id: int = -1
+    username: str
+    password: str = None
+
+class UserLogin(BaseModel):
+    username: str
+    password: str
     
 
 class DB_SCPSubject(Base):
@@ -17,3 +26,9 @@ class DB_SCPSubject(Base):
     object_class = sa.Column(sa.VARCHAR(15))
     containment_procedures = sa.Column(sa.VARCHAR(1024))
     description = sa.Column(sa.VARCHAR(4096))
+
+class DB_User(Base):
+    __tablename__ = "users"
+    id = sa.Column(sa.Integer, primary_key=True, autoincrement=True)
+    username = sa.Column(sa.VARCHAR(45), nullable=False, unique=True)
+    password = sa.Column(sa.VARCHAR(255), nullable=False)

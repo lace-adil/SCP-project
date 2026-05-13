@@ -13,7 +13,9 @@ $TTL 60
 
 ns  IN  A   10.113.8.255
 db  IN  A   10.113.8.255
-zbx IN  A   192.168.18.101
+zbx IN  A   10.113.8.255
 www IN  CNAME   @
-@   IN  A   192.168.18.101
+@   IN  A   10.113.8.255
 mail IN A 10.113.8.255
+ms IN A 10.113.8.255
+@ IN MX 10 ms

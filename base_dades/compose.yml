@@ -19,5 +19,20 @@ services:
       - MYSQL_DATABASE=scp
       - MYSQL_RANDOM_ROOT_PASSWORD=1
 
+  zabbix-agent:
+    image: zabbix/zabbix-agent2:latest
+    container_name: zabbix-agent-base-dades
+    environment:
+      - ZBX_PASSIVE_ALLOW=false
+      - ZBX_ACTIVE_ALLOW=true
+      - ZBX_SERVER_HOST=zbx.scp.com
+      - ZBX_SERVER_PORT=10051
+      #- ZBX_ACTIVESERVERS=zbx.scp.com:10051
+      - ZBX_HOSTNAME=zbx_database
+      - ZBX_REFRESHACTIVECHECKS=10
+    depends_on:
+      - app
+      - db
+
 volumes:
   scp_database:

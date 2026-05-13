@@ -9,7 +9,7 @@ services:
     depends_on:
       - zabbix-database
     ports:
-    - "10050:10050"
+    - "10051:10051"
   
 
   zabbix-frontend:
