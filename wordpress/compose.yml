@@ -1,0 +1,13 @@
+services:
+  wp:
+    image: wordpress
+    restart: always
+    ports:
+      - 80:80
+    environment:
+      WORDPRESS_DB_HOST: db.scp.com
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: PressMyWord!
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - ./wordpress-data:/var/www/html
