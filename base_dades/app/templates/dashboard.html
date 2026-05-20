@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ca">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - SCP Database</title>
+    <title>Panell de Control - Base de Dades SCP</title>
     <style>
         * {
             margin: 0;
@@ -288,28 +288,28 @@
 </head>
 <body>
     <div class="navbar">
-        <h1>SCP Database</h1>
+        <h1>Base de Dades SCP</h1>
         <div class="navbar-right">
-            <div class="user-info">Welcome, <strong id="username">{{ username }}</strong>!</div>
+            <div class="user-info">Benvingut, <strong id="username">{{ username }}</strong>!</div>
             <form action="/auth/logout" method="POST" style="margin: 0;">
-                <button type="submit" class="logout-btn">Logout</button>
+                <button type="submit" class="logout-btn">Tancar Sessió</button>
             </form>
         </div>
     </div>
     
     <div class="container">
         <div class="welcome-section">
-            <h2>Welcome to the SCP Database</h2>
-            <p>You are now logged in. Use the options below to manage SCP subjects in the database.</p>
+            <h2>Benvingut a la Base de Dades SCP</h2>
+            <p>Estàs connectat. Utilitza les opcions següents per gestionar els temes SCP a la base de dades.</p>
         </div>
         
         <div class="database-section">
-            <h3>SCP Subjects Database</h3>
+            <h3>Base de Dades de Subjectes SCP</h3>
             
             <div class="button-group">
-                <button class="action-btn" onclick="showListModal()">View All SCP Subjects</button>
-                <button class="action-btn secondary" onclick="showAddModal()">Add New SCP Subject</button>
-                <button class="action-btn" onclick="updateDatabase()">Update Database</button>
+                <button class="action-btn" onclick="showListModal()">Veure tots els subjectes SCP</button>
+                <button class="action-btn secondary" onclick="showAddModal()">Afegir nou subjecte SCP</button>
+                <button class="action-btn" onclick="updateDatabase()">Actualitzar base de dades</button>
             </div>
             
             <div id="messageContainer"></div>
@@ -321,10 +321,10 @@
     <div id="listModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>SCP Subjects List</h2>
+                <h2>Llista de Subjectes SCP</h2>
                 <button class="close-btn" onclick="closeModal('listModal')">&times;</button>
             </div>
-            <div id="listContent" class="loading">Loading...</div>
+            <div id="listContent" class="loading">Carregant...</div>
         </div>
     </div>
     
@@ -332,26 +332,26 @@
     <div id="editModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Edit SCP Subject</h2>
+                <h2>Editar Subjecte SCP</h2>
                 <button class="close-btn" onclick="closeModal('editModal')">&times;</button>
             </div>
             <form id="editForm">
                 <input type="hidden" id="editId" name="id">
                 <div class="form-group">
-                    <label for="editObjectClass">Object Class</label>
+                    <label for="editObjectClass">Classe d'Objecte</label>
                     <input type="text" id="editObjectClass" name="object_class" required>
                 </div>
                 <div class="form-group">
-                    <label for="editProcedures">Containment Procedures</label>
+                    <label for="editProcedures">Procediments de Contenció</label>
                     <textarea id="editProcedures" name="containment_procedures" rows="4" required></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="editDescription">Description</label>
+                    <label for="editDescription">Descripció</label>
                     <textarea id="editDescription" name="description" rows="4" required></textarea>
                 </div>
                 <div style="display: flex; gap: 10px;">
-                    <button type="submit" class="action-btn" style="flex: 1;">Save Changes</button>
-                    <button type="button" class="action-btn danger" onclick="deleteCurrentSubject()" style="flex: 1;">Delete Subject</button>
+                    <button type="submit" class="action-btn" style="flex: 1;">Guardar Canvis</button>
+                    <button type="button" class="action-btn danger" onclick="deleteCurrentSubject()" style="flex: 1;">Suprimir Subjecte</button>
                 </div>
             </form>
         </div>
@@ -361,27 +361,27 @@
     <div id="addModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Add New SCP Subject</h2>
+                <h2>Afegir Nou Subjecte SCP</h2>
                 <button class="close-btn" onclick="closeModal('addModal')">&times;</button>
             </div>
             <form id="addForm">
                 <div class="form-group">
-                    <label for="subjectId">ID (leave blank for auto-increment)</label>
+                    <label for="subjectId">ID (deixa en blanc per a autoincrementació)</label>
                     <input type="number" id="subjectId" name="id" min="1">
                 </div>
                 <div class="form-group">
-                    <label for="objectClass">Object Class</label>
+                    <label for="objectClass">Classe d'Objecte</label>
                     <input type="text" id="objectClass" name="object_class" required>
                 </div>
                 <div class="form-group">
-                    <label for="procedures">Containment Procedures</label>
+                    <label for="procedures">Procediments de Contenció</label>
                     <textarea id="procedures" name="containment_procedures" rows="4" required></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="description">Description</label>
+                    <label for="description">Descripció</label>
                     <textarea id="description" name="description" rows="4" required></textarea>
                 </div>
-                <button type="submit" class="action-btn" style="width: 100%;">Add Subject</button>
+                <button type="submit" class="action-btn" style="width: 100%;">Afegir Subjecte</button>
             </form>
         </div>
     </div>
@@ -392,18 +392,18 @@
         function showListModal() {
             const modal = document.getElementById('listModal');
             const content = document.getElementById('listContent');
-            content.textContent = 'Loading...';
+            content.textContent = 'Carregant...';
             modal.classList.add('show');
             
             fetch('/scp/list')
                 .then(res => res.json())
                 .then(data => {
                     if (Object.keys(data).length === 0) {
-                        content.innerHTML = '<div class="empty-state">No SCP subjects found.</div>';
+                        content.innerHTML = '<div class="empty-state">No s\'han trobat subjectes SCP.</div>';
                         return;
                     }
                     
-                    let html = '<table><thead><tr><th>ID</th><th>Object Class</th><th>Containment Procedures</th><th>Description</th><th>Actions</th></tr></thead><tbody>';
+                    let html = '<table><thead><tr><th>ID</th><th>Classe d\'Objecte</th><th>Procediments de Contenció</th><th>Descripció</th><th>Accions</th></tr></thead><tbody>';
                     for (const [id, subject] of Object.entries(data)) {
                         const procPreview = subject.containment_procedures.substring(0, 50);
                         const descPreview = subject.description.substring(0, 50);
@@ -413,8 +413,8 @@
                             <td>${procPreview}...</td>
                             <td>${descPreview}...</td>
                             <td>
-                                <button class="action-btn" onclick="loadEditModal(${id})" style="padding: 5px 10px; font-size: 12px;">Edit</button>
-                                <a href="/scp/${id}" class="action-btn secondary" style="padding: 5px 10px; font-size: 12px; text-decoration: none; display: inline-block;">View</a>
+                                <button class="action-btn" onclick="loadEditModal(${id})" style="padding: 5px 10px; font-size: 12px;">Editar</button>
+                                <a href="/scp/${id}" class="action-btn secondary" style="padding: 5px 10px; font-size: 12px; text-decoration: none; display: inline-block;">Veure</a>
                             </td>
                         </tr>`;
                     }
@@ -422,7 +422,7 @@
                     content.innerHTML = html;
                 })
                 .catch(err => {
-                    content.innerHTML = '<div class="error">Failed to load data: ' + err.message + '</div>';
+                    content.innerHTML = '<div class="error">Error al carregar les dades: ' + err.message + '</div>';
                 });
         }
         
@@ -437,15 +437,15 @@
         
         function updateDatabase() {
             const messageContainer = document.getElementById('messageContainer');
-            messageContainer.innerHTML = '<div class="loading">Updating database...</div>';
+            messageContainer.innerHTML = '<div class="loading">Actualitzant la base de dades...</div>';
             
             fetch('/update-db')
                 .then(res => res.json())
                 .then(data => {
-                    messageContainer.innerHTML = '<div class="success">Database updated successfully!</div>';
+                    messageContainer.innerHTML = '<div class="success">Base de dades actualitzada correctament!</div>';
                 })
                 .catch(err => {
-                    messageContainer.innerHTML = '<div class="error">Failed to update database: ' + err.message + '</div>';
+                    messageContainer.innerHTML = '<div class="error">Error al actualitzar la base de dades: ' + err.message + '</div>';
                 });
         }
         
@@ -473,10 +473,10 @@
                 const messageContainer = document.getElementById('messageContainer');
                 
                 if (response.ok) {
-                    messageContainer.innerHTML = '<div class="success">SCP subject added successfully!</div>';
+                    messageContainer.innerHTML = '<div class="success">Subjecte SCP afegit correctament!</div>';
                     closeModal('addModal');
                 } else {
-                    messageContainer.innerHTML = '<div class="error">Failed to add subject: ' + result.detail + '</div>';
+                    messageContainer.innerHTML = '<div class="error">Error al afegir el subjecte: ' + result.detail + '</div>';
                 }
             } catch (err) {
                 document.getElementById('messageContainer').innerHTML = '<div class="error">Error: ' + err.message + '</div>';
@@ -506,7 +506,7 @@
                 
                 modal.classList.add('show');
             } catch (err) {
-                alert('Failed to load subject: ' + err.message);
+                alert('Error al carregar el subjecte: ' + err.message);
             }
         }
         
@@ -534,12 +534,12 @@
                 const messageContainer = document.getElementById('messageContainer');
                 
                 if (response.ok) {
-                    messageContainer.innerHTML = '<div class="success">SCP subject updated successfully!</div>';
+                    messageContainer.innerHTML = '<div class="success">Subjecte SCP actualitzat correctament!</div>';
                     closeModal('editModal');
                     closeModal('listModal');
                     showListModal(); // Refresh the list
                 } else {
-                    messageContainer.innerHTML = '<div class="error">Failed to update subject: ' + result.detail + '</div>';
+                    messageContainer.innerHTML = '<div class="error">Error al actualitzar el subjecte: ' + result.detail + '</div>';
                 }
             } catch (err) {
                 document.getElementById('messageContainer').innerHTML = '<div class="error">Error: ' + err.message + '</div>';
@@ -549,7 +549,7 @@
         async function deleteCurrentSubject() {
             const id = document.getElementById('editId').value;
             
-            if (!confirm(`Are you sure you want to delete SCP-${id}? This action cannot be undone.`)) {
+            if (!confirm(`Estàs segur que vols suprimir SCP-${id}? Aquesta acció no es pot desfer.`)) {
                 return;
             }
             
@@ -562,12 +562,12 @@
                 const messageContainer = document.getElementById('messageContainer');
                 
                 if (response.ok) {
-                    messageContainer.innerHTML = '<div class="success">SCP subject deleted successfully!</div>';
+                    messageContainer.innerHTML = '<div class="success">Subjecte SCP suprimit correctament!</div>';
                     closeModal('editModal');
                     closeModal('listModal');
                     showListModal(); // Refresh the list
                 } else {
-                    messageContainer.innerHTML = '<div class="error">Failed to delete subject: ' + result.detail + '</div>';
+                    messageContainer.innerHTML = '<div class="error">Error al suprimir el subjecte: ' + result.detail + '</div>';
                 }
             } catch (err) {
                 document.getElementById('messageContainer').innerHTML = '<div class="error">Error: ' + err.message + '</div>';

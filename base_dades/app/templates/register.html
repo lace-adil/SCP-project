@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ca">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - SCP Database</title>
+    <title>Registre - Base de Dades SCP</title>
     <style>
         * {
             margin: 0;
@@ -124,32 +124,32 @@
 </head>
 <body>
     <div class="register-container">
-        <h1>Create Account</h1>
+        <h1>Crear Compte</h1>
         
         <div id="errorMessage" class="error-message"></div>
         
         <form id="registerForm" method="POST" action="/auth/register">
             <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required placeholder="Choose a username" minlength="3">
+                <label for="username">Nom d'usuari</label>
+                <input type="text" id="username" name="username" required placeholder="Escull un nom d'usuari" minlength="3">
             </div>
             
             <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required placeholder="Enter your password" minlength="6">
-                <div class="password-hint">Minimum 6 characters</div>
+                <label for="password">Contrasenya</label>
+                <input type="password" id="password" name="password" required placeholder="Introdueix la teva contrasenya" minlength="6">
+                <div class="password-hint">Mínim 6 caràcters</div>
             </div>
             
             <div class="form-group">
-                <label for="passwordConfirm">Confirm Password</label>
-                <input type="password" id="passwordConfirm" name="password_confirm" required placeholder="Confirm your password" minlength="6">
+                <label for="passwordConfirm">Confirma la Contrasenya</label>
+                <input type="password" id="passwordConfirm" name="password_confirm" required placeholder="Confirma la teva contrasenya" minlength="6">
             </div>
             
-            <button type="submit" class="register-btn">Register</button>
+            <button type="submit" class="register-btn">Registre</button>
         </form>
         
         <div class="login-link">
-            Already have an account? <a href="/login">Login here</a>
+            Ja tens compte? <a href="/login">Inicia sessió aquí</a>
         </div>
     </div>
     
@@ -164,7 +164,7 @@
             const passwordConfirm = document.getElementById('passwordConfirm').value;
             
             if (password !== passwordConfirm) {
-                errorMessage.textContent = 'Passwords do not match.';
+                errorMessage.textContent = 'Les contrasenyes no coincideixen.';
                 errorMessage.classList.add('show');
                 return;
             }
@@ -187,11 +187,11 @@
                     window.location.href = '/login';
                 } else {
                     const data = await response.json();
-                    errorMessage.textContent = data.detail || 'Registration failed. Please try again.';
+                    errorMessage.textContent = data.detail || 'Ha fallat el registre. Si us plau, torna a intentar.';
                     errorMessage.classList.add('show');
                 }
             } catch (error) {
-                errorMessage.textContent = 'An error occurred. Please try again.';
+                errorMessage.textContent = 'Ha ocorregut un error. Si us plau, torna a intentar.';
                 errorMessage.classList.add('show');
             }
         });

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ca">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - SCP Database</title>
+    <title>Inicia sessió - Base de Dades SCP</title>
     <style>
         * {
             margin: 0;
@@ -118,26 +118,26 @@
 </head>
 <body>
     <div class="login-container">
-        <h1>SCP Database Login</h1>
+        <h1>Inicia Sessió - Base de Dades SCP</h1>
         
         <div id="errorMessage" class="error-message"></div>
         
         <form id="loginForm" method="POST" action="/auth/login">
             <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required placeholder="Enter your username">
+                <label for="username">Nom d'usuari</label>
+                <input type="text" id="username" name="username" required placeholder="Introdueix el teu nom d'usuari">
             </div>
             
             <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required placeholder="Enter your password">
+                <label for="password">Contrasenya</label>
+                <input type="password" id="password" name="password" required placeholder="Introdueix la teva contrasenya">
             </div>
             
-            <button type="submit" class="login-btn">Login</button>
+            <button type="submit" class="login-btn">Inicia sessió</button>
         </form>
         
         <div class="register-link">
-            Don't have an account? <a href="/auth/register">Register here</a>
+            No tens compte? <a href="/auth/register">Registra't aquí</a>
         </div>
     </div>
     
@@ -166,16 +166,16 @@
                 } else {
                     try {
                         const data = await response.json();
-                        errorMessage.textContent = data.detail || 'Login failed. Please try again.';
+                        errorMessage.textContent = data.detail || 'Ha fallat la connexió. Si us plau, torna a intentar.';
                     } catch (e) {
-                        errorMessage.textContent = 'Login failed: Invalid server response.';
+                        errorMessage.textContent = 'Ha fallat la connexió: Resposta de servidor invàlida.';
                     }
                     errorMessage.classList.add('show');
                     console.error('Login response:', response.status, response.statusText);
                 }
             } catch (error) {
                 console.error('Login error:', error);
-                errorMessage.textContent = 'An error occurred. Please try again. Error: ' + error.message;
+                errorMessage.textContent = 'Ha ocorregut un error. Si us plau, torna a intentar. Error: ' + error.message;
                 errorMessage.classList.add('show');
             }
         });
