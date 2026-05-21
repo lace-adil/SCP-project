@@ -1,11 +1,11 @@
 CREATE TABLE users (
   id int PRIMARY KEY AUTO_INCREMENT,
   username varchar(45) NOT NULL,
-  password_hash varchar(64) NOT NULL
+  password varchar(64) NOT NULL
 );
 
 CREATE TABLE zones (
-  id int PRIMARY KEY,
+  id int PRIMARY KEY AUTO_INCREMENT,
   name varchar(45)
 );
 
@@ -38,7 +38,7 @@ CREATE TABLE scp_subjects (
   object_class varchar(15) NOT NULL,
   containment_procedures varchar(1024),
   description varchar(4096),
-  chamber_id int NOT NULL,
+  chamber_id int,
   assigned_researcher_id int,
   FOREIGN KEY (chamber_id) REFERENCES chambers (id),
   FOREIGN KEY (assigned_researcher_id) REFERENCES staff (id)

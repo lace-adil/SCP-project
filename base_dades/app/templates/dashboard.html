@@ -349,6 +349,14 @@
                     <label for="editDescription">Descripció</label>
                     <textarea id="editDescription" name="description" rows="4" required></textarea>
                 </div>
+                <div class="form-group">
+                    <label for="editChamberId">ID de la Cambra</label>
+                    <input type="number" id="editChamberId" name="chamber_id">
+                </div>
+                <div class="form-group">
+                    <label for="editResearcherId">ID del Investigador Assignat</label>
+                    <input type="number" id="editResearcherId" name="assigned_researcher_id">
+                </div>
                 <div style="display: flex; gap: 10px;">
                     <button type="submit" class="action-btn" style="flex: 1;">Guardar Canvis</button>
                     <button type="button" class="action-btn danger" onclick="deleteCurrentSubject()" style="flex: 1;">Suprimir Subjecte</button>
@@ -381,6 +389,14 @@
                     <label for="description">Descripció</label>
                     <textarea id="description" name="description" rows="4" required></textarea>
                 </div>
+                <div class="form-group">
+                    <label for="chamberId">ID de la Cambra</label>
+                    <input type="number" id="chamberId" name="chamber_id">
+                </div>
+                <div class="form-group">
+                    <label for="researcherId">ID del Investigador Assignat</label>
+                    <input type="number" id="researcherId" name="assigned_researcher_id">
+                </div>
                 <button type="submit" class="action-btn" style="width: 100%;">Afegir Subjecte</button>
             </form>
         </div>
@@ -403,15 +419,19 @@
                         return;
                     }
                     
-                    let html = '<table><thead><tr><th>ID</th><th>Classe d\'Objecte</th><th>Procediments de Contenció</th><th>Descripció</th><th>Accions</th></tr></thead><tbody>';
+                    let html = '<table><thead><tr><th>ID</th><th>Classe d\'Objecte</th><th>Procediments de Contenció</th><th>Descripció</th><th>ID Cambra</th><th>ID Investigador</th><th>Accions</th></tr></thead><tbody>';
                     for (const [id, subject] of Object.entries(data)) {
                         const procPreview = subject.containment_procedures.substring(0, 50);
                         const descPreview = subject.description.substring(0, 50);
+                        const chamberId = subject.chamber_id || '-';
+                        const researcherId = subject.assigned_researcher_id || '-';
                         html += `<tr>
                             <td>${id}</td>
                             <td>${subject.object_class}</td>
                             <td>${procPreview}...</td>
                             <td>${descPreview}...</td>
+                            <td>${chamberId}</td>
+                            <td>${researcherId}</td>
                             <td>
                                 <button class="action-btn" onclick="loadEditModal(${id})" style="padding: 5px 10px; font-size: 12px;">Editar</button>
                                 <a href="/scp/${id}" class="action-btn secondary" style="padding: 5px 10px; font-size: 12px; text-decoration: none; display: inline-block;">Veure</a>
@@ -453,11 +473,16 @@
             e.preventDefault();
             
             const idValue = document.getElementById('subjectId').value;
+            const chamberIdValue = document.getElementById('chamberId').value;
+            const researcherIdValue = document.getElementById('researcherId').value;
+            
             const data = {
                 id: idValue ? parseInt(idValue) : -1,
                 object_class: document.getElementById('objectClass').value,
                 containment_procedures: document.getElementById('procedures').value,
-                description: document.getElementById('description').value
+                description: document.getElementById('description').value,
+                chamber_id: chamberIdValue ? parseInt(chamberIdValue) : null,
+                assigned_researcher_id: researcherIdValue ? parseInt(researcherIdValue) : null
             };
             
             try {
@@ -503,6 +528,8 @@
                 document.getElementById('editObjectClass').value = data.object_class;
                 document.getElementById('editProcedures').value = data.containment_procedures;
                 document.getElementById('editDescription').value = data.description;
+                document.getElementById('editChamberId').value = data.chamber_id || '';
+                document.getElementById('editResearcherId').value = data.assigned_researcher_id || '';
                 
                 modal.classList.add('show');
             } catch (err) {
@@ -514,11 +541,16 @@
             e.preventDefault();
             
             const id = document.getElementById('editId').value;
+            const chamberIdValue = document.getElementById('editChamberId').value;
+            const researcherIdValue = document.getElementById('editResearcherId').value;
+            
             const data = {
                 id: parseInt(id),
                 object_class: document.getElementById('editObjectClass').value,
                 containment_procedures: document.getElementById('editProcedures').value,
-                description: document.getElementById('editDescription').value
+                description: document.getElementById('editDescription').value,
+                chamber_id: chamberIdValue ? parseInt(chamberIdValue) : null,
+                assigned_researcher_id: researcherIdValue ? parseInt(researcherIdValue) : null
             };
             
             try {

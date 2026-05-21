@@ -14,33 +14,33 @@ def update_db():
 @router.get("/scp/get/{item_id}")
 def getSCPSubject(item_id: int, res: Response):
 
-    procedures = 0
-    description = 0
-    object_class = 0
-    data = None
-
     with utils.db_engine.connect() as db_con:
-
-        result = db_con.execute(sqlalchemy.text(f"SELECT * FROM scp_subjects WHERE id={item_id};"))
+        result = db_con.execute(sqlalchemy.text(f"SELECT id, object_class, containment_procedures, description, chamber_id, assigned_researcher_id FROM scp_subjects WHERE id={item_id};"))
         data = result.fetchone()
 
     if data:
-        procedures = data[2]
-        description = data[3]
-        object_class = data[1]
+        return {
+            "id": data[0],
+            "object_class": data[1],
+            "containment_procedures": data[2],
+            "description": data[3],
+            "chamber_id": data[4],
+            "assigned_researcher_id": data[5]
+        }
     else:
-        pass
         res = HTTPException(status_code=404, detail="404 Item Not Found")
         return res
-
-    return {"id": item_id, "object_class": object_class, "containment_procedures": procedures, "description": description}
 
 
 @router.post("/scp/insert")
 def insertSCPSubject(scp_subject: SCPSubject):
+    chamber_val = f", {scp_subject.chamber_id}" if scp_subject.chamber_id is not None else ""
+    researcher_val = f", {scp_subject.assigned_researcher_id}" if scp_subject.assigned_researcher_id is not None else ""
+    chamber_col = ", chamber_id" if scp_subject.chamber_id is not None else ""
+    researcher_col = ", assigned_researcher_id" if scp_subject.assigned_researcher_id is not None else ""
 
-    order = f"""INSERT INTO scp_subjects ({"id," if scp_subject.id >= 0 else ""} object_class, containment_procedures, description) VALUES
-    ({f"{scp_subject.id}," if scp_subject.id>=0 else ""} \"{scp_subject.object_class}\", \"{scp_subject.containment_procedures}\", \"{scp_subject.description}\");"""
+    order = f"""INSERT INTO scp_subjects ({"id," if scp_subject.id >= 0 else ""} object_class, containment_procedures, description{chamber_col}{researcher_col}) VALUES
+    ({f"{scp_subject.id}," if scp_subject.id>=0 else ""} \"{scp_subject.object_class}\", \"{scp_subject.containment_procedures}\", \"{scp_subject.description}\"{chamber_val}{researcher_val});"""
 
     with utils.db_engine.connect() as db_con:
         db_con.execute(sqlalchemy.text(order))
@@ -53,7 +53,10 @@ def updateSCPSubject(item_id: int, scp_subject: SCPSubject):
     """Update an existing SCP subject."""
     order = f"""UPDATE scp_subjects SET object_class="{scp_subject.object_class}", 
     containment_procedures="{scp_subject.containment_procedures}", 
-    description="{scp_subject.description}" WHERE id={item_id};"""
+    description="{scp_subject.description}",
+    chamber_id={scp_subject.chamber_id if scp_subject.chamber_id is not None else "NULL"},
+    assigned_researcher_id={scp_subject.assigned_researcher_id if scp_subject.assigned_researcher_id is not None else "NULL"}
+    WHERE id={item_id};"""
 
     with utils.db_engine.connect() as db_con:
         db_con.execute(sqlalchemy.text(order))
@@ -72,7 +75,7 @@ def deleteSCPSubject(item_id: int):
 
 @router.get("/scp/list")
 def showSCPSubjects():
-    order = f"""SELECT id, object_class, containment_procedures, description FROM scp_subjects;"""
+    order = f"""SELECT id, object_class, containment_procedures, description, chamber_id, assigned_researcher_id FROM scp_subjects;"""
 
     with utils.db_engine.connect() as db_con:
         result = db_con.execute(sqlalchemy.text(order))
@@ -80,7 +83,13 @@ def showSCPSubjects():
 
         full_list = {}
         for item in result:
-            full_list[item[0]] = {"object_class": item[1], "containment_procedures":item[2],"description":item[3]}
+            full_list[item[0]] = {
+                "object_class": item[1],
+                "containment_procedures": item[2],
+                "description": item[3],
+                "chamber_id": item[4],
+                "assigned_researcher_id": item[5]
+            }
 
         return full_list
 
@@ -89,13 +98,13 @@ def showSCPSubjects():
 def listSCPPage():
     """Serve a public page listing all SCP subjects."""
     with utils.db_engine.connect() as db_con:
-        result = db_con.execute(sqlalchemy.text("SELECT id, object_class, containment_procedures, description FROM scp_subjects;"))
+        result = db_con.execute(sqlalchemy.text("SELECT id, object_class, containment_procedures, description, chamber_id, assigned_researcher_id FROM scp_subjects;"))
         subjects = result.fetchall()
 
     subjects_html = ""
     if subjects:
         for subject in subjects:
-            item_id, obj_class, procedures, description = subject
+            item_id, obj_class, procedures, description, chamber_id, researcher_id = subject
             procedures_preview = procedures[:100] + "..." if len(procedures) > 100 else procedures
             subjects_html += f"""
             <div class="scp-card">
@@ -249,7 +258,7 @@ def listSCPPage():
 def getSCPSubjectPage(item_id: int):
     """Serve a public page for viewing an SCP subject."""
     with utils.db_engine.connect() as db_con:
-        result = db_con.execute(sqlalchemy.text(f"SELECT * FROM scp_subjects WHERE id={item_id};"))
+        result = db_con.execute(sqlalchemy.text(f"SELECT id, object_class, containment_procedures, description, chamber_id, assigned_researcher_id FROM scp_subjects WHERE id={item_id};"))
         data = result.fetchone()
 
     if not data:
@@ -276,7 +285,9 @@ def getSCPSubjectPage(item_id: int):
         </html>
         """
 
-    item_id_db, object_class, procedures, description = data
+    item_id_db, object_class, procedures, description, chamber_id, researcher_id = data
+    chamber_info = f"<p><strong>Chamber ID:</strong> {chamber_id}</p>" if chamber_id else ""
+    researcher_info = f"<p><strong>Assigned Researcher ID:</strong> {researcher_id}</p>" if researcher_id else ""
     
     html_content = f"""
     <!DOCTYPE html>
@@ -399,6 +410,9 @@ def getSCPSubjectPage(item_id: int):
                     <h2>Description</h2>
                     <p>{description}</p>
                 </div>
+                
+                {chamber_info}
+                {researcher_info}
             </div>
             
             <div class="footer">
